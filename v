@@ -109,13 +109,17 @@ public class WinAPI {
 $SW_MAXIMIZE = 3
 
 # Helper: Maximize by process
-function Maximize-ByProcess { param([System.Diagnostics.Process]$Process) if (-not $Process) { return } for ($i=0; $i -lt 20; $i++) {
-    $Process.Refresh()
-    if ($Process.MainWindowHandle -ne 0) {
-        [WinAPI]::ShowWindow($Process.MainWindowHandle, $SW_MAXIMIZE) | Out-Null
-        break
+function Maximize-ByProcess { 
+    param([System.Diagnostics.Process]$Process) 
+    if (-not $Process) { return } 
+    for ($i=0; $i -lt 20; $i++) {
+        $Process.Refresh()
+        if ($Process.MainWindowHandle -ne 0) {
+            [WinAPI]::ShowWindow($Process.MainWindowHandle, $SW_MAXIMIZE) | Out-Null
+            break
+        }
+        Start-Sleep -Milliseconds 250
     }
-    Start-Sleep -Milliseconds 250
 }
 
 # Helper: Download-and-extract if missing; otherwise reuse
